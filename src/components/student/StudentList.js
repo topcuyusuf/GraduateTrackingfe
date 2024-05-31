@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Paper, Box, Table, TableContainer, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
+import { Container, Paper, Box, Table, TableContainer, TableHead, TableRow, TableCell, TableBody, TextField } from '@mui/material';
 import axios from 'axios';
 
 export default function StudentList() {
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchStudents = async () => {
@@ -21,6 +22,15 @@ export default function StudentList() {
     fetchStudents();
   }, []);
 
+  const filteredStudents = students.filter((student) =>
+    student.fullName && student.fullName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  
+
+  const handleSearchInputChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -29,6 +39,14 @@ export default function StudentList() {
     <Container>
       <Box mt={4}>
         <h1>All Students</h1>
+        <TextField
+          label="Search by Full Name"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchInputChange}
+          fullWidth
+          margin="normal"
+        />
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -57,7 +75,7 @@ export default function StudentList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {students.map((student) => (
+              {filteredStudents.map((student) => (
                 <TableRow key={student.id}>
                   <TableCell>{student.fullName}</TableCell>
                   <TableCell>{student.email}</TableCell>

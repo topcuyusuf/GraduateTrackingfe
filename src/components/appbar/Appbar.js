@@ -24,6 +24,9 @@ export default function Appbar() {
         <Button color="inherit" onClick={() => navigate('/student-register')}>
           Student Register
         </Button>
+        <Button color="inherit" onClick={() => navigate('/notification')}>
+          Add Notification
+        </Button>
       </Toolbar>
     </AppBar>
   );
